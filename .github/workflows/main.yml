@@ -40,11 +40,11 @@ jobs:
               key: '${{ secrets.RAPIDAPI_KEY }}',
               host: '${{ secrets.RAPIDAPI_HOST }}'
             }
-          };" > ./src/environments/environment.ts
+          };" > ./src/environments/environment.prod.ts
 
           # Verificar el reemplazo
           echo "Contenido actualizado:"
-          cat ./src/environments/environment.ts
+          cat ./src/environments/environment.prod.ts
 
       # 4. Instalar dependencias desde Azure Artifacts
       - name: Install deps
