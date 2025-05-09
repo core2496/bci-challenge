@@ -37,8 +37,8 @@ jobs:
           sed -i "s|export const environment = {.*}|export const environment = { \
             production: true, \
             rapidApi: { \
-              key: '${{ secrets.RAPIDAPI_KEY }}', \
-              host: '${{ secrets.RAPIDAPI_HOST }}' \
+              key: '${{secrets.RAPIDAPI_KEY}}', \
+              host: '${{secrets.RAPIDAPI_HOST}}' \
             } \
           }|g" ./src/environments/environment.ts
 
