@@ -1,0 +1,1 @@
+export const STORAGE_PRODUCT_KEY = 'products';
