@@ -8,7 +8,7 @@ import {
 import { Injectable } from '@angular/core';
 
 import { catchError, Observable, throwError } from 'rxjs';
-import { environment } from 'src/environments/environments';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,7 @@ export class HttpConfigInterceptorService implements HttpInterceptor {
       'x-rapidapi-key': environment.rapidApi.key,
       'x-rapidapi-host': environment.rapidApi.host,
     };
-
+    debugger
     const reqCloned = req.clone({ setHeaders: AUTH_HEADERS });
 
  
