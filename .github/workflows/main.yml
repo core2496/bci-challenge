@@ -41,6 +41,10 @@ jobs:
           echo "  }" >> ./src/environments/environment.ts
           echo "};" >> ./src/environments/environment.ts
 
+      # 3. Verifica el contenido de environment.ts
+      - name: Ver contenido de environment.ts
+        run: cat ./src/environments/environment.ts
+
       # 4. Instalar dependencias desde Azure Artifacts
       - name: Install deps
         run: npm i
