@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ProductApiService } from './shared/services/product/product-api.service';
 import { ProductAdapterRes } from './shared/services/product/product-api.consts';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-root',
@@ -29,32 +30,45 @@ export class AppComponent {
 
   currentId: number | null = null;
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(
     private productApiService: ProductApiService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    // this.getProductsByCategory();
+    this.getProductsByCategory();
 
     this.productForm = this.fb.group({
       title: ['', [Validators.required]],
-      price: [0.0, [Validators.required, Validators.min(0)]],
+      price: [0.0, [Validators.required, Validators.min(0.1)]],
       currency: [null, [Validators.required]],
       isPrime: [false],
     });
   }
 
-  get titleControl() { return this.productForm.get('title'); }
-  get priceControl() { return this.productForm.get('price'); }
-  get currencyControl() { return this.productForm.get('currency'); }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  get titleControl() {
+    return this.productForm.get('title');
+  }
+  get priceControl() {
+    return this.productForm.get('price');
+  }
+  get currencyControl() {
+    return this.productForm.get('currency');
+  }
 
   getProductsByCategory(): void {
     this.productApiService
       .getAdaptedProductsByCategory()
-      .subscribe((productAdapterRes: ProductAdapterRes) => {
-        console.log('productAdapterRes', productAdapterRes);
+      .subscribe((productAdapterRes: ProductAdapterRes[]) => {
+        this.dataSource.data = productAdapterRes.reverse();
+     
       });
   }
   getCurrencyLabel(value: number): string {
@@ -67,64 +81,80 @@ export class AppComponent {
       duration: 3000,
       horizontalPosition: 'end',
       verticalPosition: 'top',
-      panelClass: ['success-snackbar']
+      panelClass: ['success-snackbar'],
     });
   }
-  
-  private markFormGroupTouched(formGroup: FormGroup) {
-    Object.values(formGroup.controls).forEach(control => {
-      control.markAsTouched();
-      if (control instanceof FormGroup) {
-        this.markFormGroupTouched(control);
+
+  private resetForm(): void {
+    this.productForm.reset();
+
+    Object.keys(this.productForm.controls).forEach((key) => {
+      const control = this.productForm.get(key);
+      if (control) {
+        control.markAsPristine();
+        control.markAsUntouched();
+        control.setErrors(null);
       }
     });
+    this.currentId = null;
   }
-  onSubmit() {
-    if (this.productForm.valid) {
-      console.log(this.productForm.value);
-      const currentData = this.dataSource.data;
 
-      if (this.currentId) {
-        const updatedData = currentData.map(item => 
-          item.id === this.currentId 
-            ? { ...this.productForm.value, id: this.currentId }
-            : item
-        );
-        this.dataSource.data = updatedData;
-        this.showNotification('Producto actualizado exitosamente');
-      } else {
-        const nextId = currentData.length > 0 
-          ? currentData[currentData.length - 1].id + 1 
-          : 1;
+  onSubmit(): void {
+    if (!this.productForm.valid) return;
 
-        const newProduct: ProductAdapterRes = {
-          ...this.productForm.value,
-          id: nextId,
-        };
-        this.dataSource.data = [...currentData, newProduct];
-        this.showNotification('Producto registrado exitosamente');
+    const currentData = this.dataSource.data;
+    this.currentId
+      ? this.updateProduct(currentData)
+      : this.createProduct(currentData);
 
-      }
-      this.productForm.reset();
-      this.currentId = null;
-    } else{
-      this.markFormGroupTouched(this.productForm);
-    }
+    this.resetForm();
+  }
+
+  private updateProduct(currentData: ProductAdapterRes[]): void {
+    const updatedData = currentData.map((item) =>
+      item.id === this.currentId
+        ? { ...this.productForm.value, id: this.currentId }
+        : item
+    );
+    this.dataSource.data = updatedData;
+    this.showNotification('Producto actualizado exitosamente');
+  }
+
+  private createProduct(currentData: ProductAdapterRes[]): void {
+    const nextId = currentData.length > 0 ? currentData[0].id + 1 : 1;
+
+    const newProduct: ProductAdapterRes = {
+      ...this.productForm.value,
+      id: nextId,
+    };
+    this.dataSource.data = [newProduct, ...currentData];
+    this.showNotification('Producto registrado exitosamente');
   }
 
   onEdit(element: ProductAdapterRes): void {
-    console.log('Editando:', element);
+
     this.currentId = element.id;
+
+    let currencyValue = element.currency;
+    if (typeof element.currency === 'string') {
+      currencyValue = element.currency === 'USD' ? '0' : '1';
+    }
+
+    let priceValue = element.price;
+    if (typeof element.price === 'string') {
+      priceValue = element.price.replace('$', '');
+    }
+
     this.productForm.patchValue({
       title: element.title,
-      price: element.price,
-      currency: element.currency,
+      price: Number(priceValue),
+      currency: Number(currencyValue),
       isPrime: element.isPrime,
     });
   }
 
   onDelete(element: ProductAdapterRes): void {
-    console.log('Eliminando:', element);
+
     const index = this.dataSource.data.findIndex(
       (item) => item.id === element.id
     );
@@ -135,5 +165,9 @@ export class AppComponent {
       this.dataSource.data = newData;
       this.showNotification('Producto eliminado exitosamente');
     }
+  }
+
+  onClear(): void {
+    this.resetForm();
   }
 }

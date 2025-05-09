@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +37,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatTableModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatPaginatorModule,
   ],
   providers: [
     ProductApiService,

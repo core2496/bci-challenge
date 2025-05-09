@@ -1,4 +1,4 @@
-/* Base styles - Mobile first */
+/* Mobile first */
 .product-form {
   display: flex;
   flex-direction: column;
@@ -35,16 +35,20 @@
   margin: 0.5rem 0;
 }
 
-.submit-button {
+.content-button {
+  display: flex;
+  gap: 16px;
   width: 100%;
   padding: 1rem;
-  border-radius: 8px;
   margin-top: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .submit-button {
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
   }
 }
 
@@ -72,7 +76,12 @@
   padding: 1rem;
 }
 
-/* Tablet (≥ 600px) */
+mat-paginator {
+  padding-top: 16px;
+  background: transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 @media (min-width: 600px) {
   .product-form {
     padding: 2rem;
@@ -93,7 +102,7 @@
     margin: 1rem 0;
   }
 
-  .submit-button {
+  .content-button {
     grid-column: 2 / 3;
     width: auto;
     justify-self: end;
@@ -107,7 +116,6 @@
   }
 }
 
-/* Desktop (≥ 1200px) */
 @media (min-width: 1200px) {
   .product-form {
     max-width: 800px;

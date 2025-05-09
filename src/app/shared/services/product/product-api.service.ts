@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { ProductRes } from './product-api.consts';
 import { LocalStorageManagerService } from '../local-storage/local-storage-manager.service';
-import { STORAGE_PRODUCT_KEY } from '../local-storage/local-storage.constS';
+import { STORAGE_PRODUCT_KEY } from '../local-storage/local-storage.consts';
+
 
 @Injectable({
   providedIn: 'root'
