@@ -39,11 +39,7 @@ jobs:
           echo "    key: '${{ secrets.RAPIDAPI_KEY }}'," >> ./src/environments/environment.ts
           echo "    host: '${{ secrets.RAPIDAPI_HOST }}'" >> ./src/environments/environment.ts
           echo "  }" >> ./src/environments/environment.ts
-          echo "};" >> ./src/environments/environment.
-
-      # 3. Modifica Environment
-      - name: Verifica clave de RapidAPI
-        run: grep "${{ secrets.RAPIDAPI_KEY }}" ./src/environments/environment.ts
+          echo "};" >> ./src/environments/environment.ts
 
       # 4. Instalar dependencias desde Azure Artifacts
       - name: Install deps
