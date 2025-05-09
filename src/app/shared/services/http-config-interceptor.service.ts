@@ -14,14 +14,17 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class HttpConfigInterceptorService implements HttpInterceptor {
+  
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const key= '760bca4caamsh2ba073fa7762ef6p1a9d3bjsnec00fb097fa5';
+    const host='real-time-amazon-data.p.rapidapi.com';
     const AUTH_HEADERS = {
       'Access-Control-Allow-Origin': '*',
-      'x-rapidapi-key': environment.rapidApi.key,
-      'x-rapidapi-host': environment.rapidApi.host,
+      'x-rapidapi-key': key,
+      'x-rapidapi-host': host,
     };
     debugger
     const reqCloned = req.clone({ setHeaders: AUTH_HEADERS });
