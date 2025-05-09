@@ -34,7 +34,7 @@ jobs:
       - name: Modifica Environment
         run: |
           echo "export const environment = {" > ./src/environments/environment.ts
-          echo "  production: false," >> ./src/environments/environment.ts
+          echo "  production: true," >> ./src/environments/environment.ts
           echo "  rapidApi: {" >> ./src/environments/environment.ts
           echo "    key: '${{ secrets.RAPIDAPI_KEY }}'," >> ./src/environments/environment.ts
           echo "    host: '${{ secrets.RAPIDAPI_HOST }}'" >> ./src/environments/environment.ts
