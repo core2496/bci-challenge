@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
-    branches: ['main']
+    branches: ["main"]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,7 +28,7 @@ jobs:
       - name: Setup node.js
         uses: actions/setup-node@v4.0.4
         with:
-          node-version: '18'
+          node-version: "18"
 
       # 3. Modifica Environment
       - name: Modifica Environment
@@ -51,12 +51,12 @@ jobs:
 
       # 6. Route file renaming
       - name: Rename index for routing
-        run: mv dist/bricks-docs/index.html dist/bricks-docs/404.html
-        
+        run: mv dist/bci-challenge/index.html dist/bci-challenge/404.html
+
       # 7. Deploy to GitHub
       - name: Deploy to Pages
         uses: crazy-max/ghaction-github-pages@v4.0.0
         with:
-          build_dir: dist/bricks-docs
+          build_dir: dist/bci-challenge
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
