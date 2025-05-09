@@ -21,6 +21,7 @@ export class HttpConfigInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const key= '760bca4caamsh2ba073fa7762ef6p1a9d3bjsnec00fb097fa5';
     const host='real-time-amazon-data.p.rapidapi.com';
+    console.log('environment', environment.rapidApi.key);
     const AUTH_HEADERS = {
       'Access-Control-Allow-Origin': '*',
       'x-rapidapi-key': key,
